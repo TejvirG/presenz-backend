@@ -19,6 +19,11 @@ app.get("/", (req, res) => {
 	res.send("Presenz Backend Running ✅");
 });
 
+// lightweight JSON health endpoint for uptime checks
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "Presenz backend running fine ✅" });
+});
+
 // ✅ register routes
 app.use("/api/auth", authRoutes);
 // app.use("/api/attendance", attendanceRoutes);
