@@ -8,28 +8,53 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-// CORS configuration
+// CORS configuration for Render deployment
 const corsOptions = {
-  origin: '*',  // or your specific frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: ['http://localhost:3000', 'https://presenz-frontend.vercel.app', '*'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // ✅ connect to MongoDB
 connectDB();
 
-// ✅ test route for health
+// Root route returns API info
 app.get("/", (req, res) => {
-	res.send("Presenz Backend Running ✅");
+  res.json({
+    name: "Presenz Backend API",
+    status: "running",
+    version: "1.0.0",
+    endpoints: ["/api/auth/signup", "/api/auth/login"]
+  });
 });
 
-// lightweight JSON health endpoint for uptime checks
+// API root shows available routes
+app.get("/api", (req, res) => {
+  res.json({
+    status: "ok",
+    routes: {
+      auth: {
+        signup: "POST /api/auth/signup",
+        login: "POST /api/auth/login"
+      },
+      health: "GET /api/health"
+    }
+  });
+});
+
+// Health check endpoint for Render
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Presenz backend running fine ✅" });
+  res.json({ 
+    status: "ok", 
+    message: "Presenz backend running fine ✅",
+    env: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // ✅ register routes
