@@ -11,5 +11,5 @@ const classSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Class = mongoose.model("Class", classSchema);
+const Class = mongoose.models.Class || mongoose.model("Class", classSchema);
 export default Class;

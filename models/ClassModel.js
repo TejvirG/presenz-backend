@@ -6,4 +6,5 @@ const classSchema = new mongoose.Schema({
   longitude: Number
 });
 
-export default mongoose.model("Class", classSchema);
+const Class = mongoose.models.Class || mongoose.model("Class", classSchema);
+export default Class;
