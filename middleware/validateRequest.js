@@ -14,12 +14,16 @@ export const validateSignupRequest = (req, res, next) => {
     });
   }
   
-  if (!["Student", "Teacher", "Admin"].includes(role)) {
+  // Convert role to Title Case and validate
+  const normalizedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+  if (!["Student", "Teacher", "Admin"].includes(normalizedRole)) {
     return res.status(400).json({ 
       error: "Invalid role. Must be Student, Teacher, or Admin" 
     });
   }
   
+  // Store normalized role
+  req.body.role = normalizedRole;
   next();
 };
 
