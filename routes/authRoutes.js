@@ -4,6 +4,14 @@ import { validateSignupRequest, validateLoginRequest } from "../middleware/valid
 
 const router = express.Router();
 
+// Debug: list available auth routes (helps verify router is mounted)
+router.get("/", (req, res) => {
+	res.json({
+		message: "Auth routes mounted",
+		routes: ["POST /api/auth/signup", "POST /api/auth/login"]
+	});
+});
+
 // POST /api/auth/signup
 router.post("/signup", validateSignupRequest, registerUser);
 
