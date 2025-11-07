@@ -8,7 +8,15 @@ import authRoutes from "./routes/authRoutes.js";
 dotenv.config();
 const app = express();
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: '*',  // or your specific frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ✅ connect to MongoDB
@@ -30,7 +38,21 @@ app.use("/api/auth", authRoutes);
 // app.use("/api/teacher", teacherRoutes);
 // app.use("/api/admin", adminRoutes);
 
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: "Server error", 
+    message: process.env.NODE_ENV === 'development' ? err.message : 'An unexpected error occurred' 
+  });
+});
+
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
