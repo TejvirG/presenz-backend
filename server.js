@@ -97,6 +97,16 @@ app.listen(PORT, () => {
 		console.error('Failed to list routes:', err);
 	}
 });
+	// Friendly startup banner for Render logs
+	console.log('--------------------------------------------------');
+	console.log(`⚡️ Server environment: ${process.env.NODE_ENV || 'production'}`);
+	console.log(`⚡️ Server running at http://0.0.0.0:${PORT}`);
+	console.log(`⚡️ Database: ${process.env.MONGO_URI ? 'MongoDB connection active' : 'MongoDB not configured'}`);
+	console.log('⚡️ API endpoints:');
+	console.log('   - GET  /api/health');
+	console.log('   - POST /api/auth/signup');
+	console.log('   - POST /api/auth/login');
+	console.log('--------------------------------------------------');
 // Ensure auth base info is available even if router not mounted
 app.get('/api/auth', (req, res) => {
 	res.json({
