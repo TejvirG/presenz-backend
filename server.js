@@ -80,3 +80,13 @@ app.listen(PORT, () => {
 		console.error('Failed to list routes:', err);
 	}
 });
+// Ensure auth base info is available even if router not mounted
+app.get('/api/auth', (req, res) => {
+	res.json({
+		message: 'Auth endpoints',
+		endpoints: {
+			signup: '/api/auth/signup (POST)',
+			login: '/api/auth/login (POST)'
+		}
+	});
+});

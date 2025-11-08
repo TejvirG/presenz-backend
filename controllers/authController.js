@@ -15,8 +15,14 @@ export const registerUser = async (req, res) => {
       return;
     }
 
-    const newUser = new User({ name, email, password, role: role.toLowerCase() });
+    const userRole = role ? String(role).toLowerCase() : "student";
+    const newUser = new User({ name, email, password, role: userRole });
     await newUser.save();
+
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET not set in environment');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
 
     const token = jwt.sign(
       { id: newUser._id, role: newUser.role },
@@ -51,6 +57,11 @@ export const loginUser = async (req, res) => {
     if (!user || user.password !== password) {
       res.status(400).json({ message: "Invalid credentials" });
       return;
+    }
+
+    if (!process.env.JWT_SECRET) {
+      console.error('JWT_SECRET not set in environment');
+      return res.status(500).json({ message: 'Server configuration error' });
     }
 
     const token = jwt.sign(
