@@ -39,6 +39,16 @@ app.get("/api", (req, res) => {
 app.get("/api/health", (req, res) => {
 	res.json({ status: "ok", uptime: process.uptime() });
 });
+// Ensure auth base info is available even if router not mounted
+app.get('/api/auth', (req, res) => {
+	res.json({
+		message: 'Auth endpoints',
+		endpoints: {
+			signup: '/api/auth/signup (POST)',
+			login: '/api/auth/login (POST)'
+		}
+	});
+});
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/teacher", teacherRoutes);
