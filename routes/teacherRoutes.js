@@ -4,13 +4,11 @@ import {
   setClassLocation, 
   createClass 
 } from "../controllers/teacherController.js";
-import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Class routes
-// Make GET /classes public (no auth) so mobile app can read class list without token
+// All routes made public
 router.get("/classes", getTeacherClasses);
-router.post("/classes", protect, createClass);
-router.post("/classes/:id/location", protect, setClassLocation);
+router.post("/classes", createClass);
+router.post("/classes/:id/location", setClassLocation);
 export default router;

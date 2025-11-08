@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
     }
   });
 });
-router.post("/mark", protect, markAttendance);
-router.get("/student/me", protect, getStudentAttendance);
-router.get("/class/:id", protect, getClassAttendance);
+router.post("/mark", markAttendance);
+router.get("/student/me", getStudentAttendance);
+router.get("/class/:id", getClassAttendance);
 export default router;

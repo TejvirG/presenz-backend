@@ -3,10 +3,9 @@ import {
   getNotifications,
   createNotification
 } from "../controllers/notificationsController.js";
-import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
-// Make notifications listing public (returns only 'all' notifications when unauthenticated)
+// All routes made public
 router.get("/", getNotifications);
-router.post("/", protect, adminOnly, createNotification);
+router.post("/", createNotification);
 export default router;
