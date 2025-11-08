@@ -7,6 +7,7 @@ import teacherRoutes from "./routes/teacherRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import notificationsRoutes from "./routes/notificationsRoutes.js";
+import classRoutes from "./routes/classRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -24,6 +25,7 @@ app.use("/api/teacher", teacherRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationsRoutes);
+app.use("/api/class", classRoutes);
 
 // Catch-all
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
