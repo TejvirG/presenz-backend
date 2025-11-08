@@ -50,4 +50,33 @@ app.use("/api/notifications", notificationsRoutes);
 app.use((req, res) => res.status(404).json({ error: "Route not found" }));
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+	console.log(`Server running on port ${PORT}`);
+
+	// Print mounted routes for easier debugging in Render logs
+	try {
+		const routes = [];
+		app._router.stack.forEach((middleware) => {
+			if (middleware.route) {
+				// routes registered directly on the app
+				const methods = Object.keys(middleware.route.methods).map(m => m.toUpperCase()).join(',');
+				routes.push(`${methods} ${middleware.route.path}`);
+			} else if (middleware.name === 'router' && middleware.handle && middleware.handle.stack) {
+				// router middleware
+				middleware.handle.stack.forEach((handler) => {
+					if (handler.route) {
+						const methods = Object.keys(handler.route.methods).map(m => m.toUpperCase()).join(',');
+						// prefix with parent path if available
+						const parentPath = middleware.regexp && middleware.regexp.source ? '' : '';
+						routes.push(`${methods} ${handler.route.path}`);
+					}
+				});
+			}
+		});
+
+		console.log('Mounted routes:');
+		routes.forEach(r => console.log(' -', r));
+	} catch (err) {
+		console.error('Failed to list routes:', err);
+	}
+});
