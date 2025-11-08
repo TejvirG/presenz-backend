@@ -18,6 +18,19 @@ app.use(express.json());
 // Health check
 app.get("/", (req, res) => res.send("Presenz backend running ✅"));
 
+// API root - helpful for clients checking base /api path
+app.get("/api", (req, res) => {
+	res.json({
+		message: "Presenz API",
+		endpoints: {
+			auth: "/api/auth",
+			teacher: "/api/teacher",
+			attendance: "/api/attendance",
+			admin: "/api/admin",
+			notifications: "/api/notifications"
+		}
+	});
+});
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/teacher", teacherRoutes);
