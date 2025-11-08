@@ -16,6 +16,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Debug: echo endpoint to verify POST connectivity and JSON parsing
+app.post('/debug/echo', (req, res) => {
+	console.log('debug/echo body:', req.body);
+	res.json({ ok: true, body: req.body });
+});
+
 // Health check
 app.get("/", (req, res) => res.send("Presenz backend running ✅"));
 

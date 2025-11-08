@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
+    console.log('registerUser called with body:', req.body);
     const { name, email, password, role } = req.body;
     if (!name || !email || !password) {
       res.status(400).json({ message: "All fields are required" });
@@ -47,6 +48,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
+    console.log('loginUser called with body:', req.body);
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400).json({ message: "Email and password required" });
