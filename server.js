@@ -23,7 +23,11 @@ app.get("/api", (req, res) => {
 	res.json({
 		message: "Presenz API",
 		endpoints: {
-			auth: "/api/auth",
+			auth: {
+				base: "/api/auth",
+				signup: "/api/auth/signup",
+				login: "/api/auth/login"
+			},
 			teacher: "/api/teacher",
 			attendance: "/api/attendance",
 			admin: "/api/admin",
