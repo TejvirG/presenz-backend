@@ -43,10 +43,6 @@ app.use((err, req, res, next) => {
 // Initialize database connection
 connectDB();
 
-// Core auth endpoints - defined first to ensure availability
-app.post('/api/auth/signup', registerUser);
-app.post('/api/auth/login', loginUser);
-
 // Debug: echo endpoint to verify POST connectivity and JSON parsing
 app.post('/debug/echo', (req, res) => {
 	console.log('debug/echo body:', req.body);
@@ -77,17 +73,8 @@ app.get("/api", (req, res) => {
 app.get("/api/health", (req, res) => {
 	res.json({ status: "ok", uptime: process.uptime() });
 });
-// Ensure auth base info is available even if router not mounted
-app.get('/api/auth', (req, res) => {
-	res.json({
-		message: 'Auth endpoints',
-		endpoints: {
-			signup: '/api/auth/signup (POST)',
-			login: '/api/auth/login (POST)'
-		}
-	});
-});
-// Routes
+
+// Mount routes - auth routes first to ensure they take precedence
 app.use("/api/auth", authRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/attendance", attendanceRoutes);
