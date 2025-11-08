@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import { registerUser, loginUser } from "./controllers/authController.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -100,3 +101,6 @@ app.get('/api/auth', (req, res) => {
 		}
 	});
 });
+// Also expose signup/login at app level to guarantee availability
+app.post('/api/auth/signup', registerUser);
+app.post('/api/auth/login', loginUser);
