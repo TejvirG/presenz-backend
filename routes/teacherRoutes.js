@@ -9,7 +9,8 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // Class routes
-router.get("/classes", protect, getTeacherClasses);
+// Make GET /classes public (no auth) so mobile app can read class list without token
+router.get("/classes", getTeacherClasses);
 router.post("/classes", protect, createClass);
 router.post("/classes/:id/location", protect, setClassLocation);
 export default router;

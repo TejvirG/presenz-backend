@@ -2,10 +2,17 @@ import ClassModel from "../models/ClassModel.js";
 
 export const getTeacherClasses = async (req, res) => {
   try {
-    // Get classes for the logged-in teacher
-    const classes = await ClassModel.find({ teacher: req.user._id })
-      .select('-teacher') // Exclude teacher field from response
-      .sort({ createdAt: -1 });
+    // If a teacher is authenticated, return their classes; otherwise return all classes (public view)
+    let classes;
+    if (req.user && req.user._id) {
+      classes = await ClassModel.find({ teacher: req.user._id })
+        .select('-teacher')
+        .sort({ createdAt: -1 });
+    } else {
+      classes = await ClassModel.find()
+        .select('-teacher')
+        .sort({ createdAt: -1 });
+    }
     res.json(classes);
   } catch (err) {
     console.error('Error in getTeacherClasses:', err);
@@ -37,10 +44,11 @@ export const createClass = async (req, res) => {
 
 export const setClassLocation = async (req, res) => {
   try {
-    const { classId, latitude, longitude } = req.body;
+      const { latitude, longitude } = req.body;
+      const classId = req.params.id;
     
-    if (!classId || !latitude || !longitude) {
-      return res.status(400).json({ message: "Class ID, latitude, and longitude are required" });
+      if (!latitude || !longitude) {
+        return res.status(400).json({ message: "Latitude and longitude are required" });
     }
 
     // Ensure the class belongs to the teacher

@@ -6,6 +6,7 @@ import {
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
-router.get("/", protect, getNotifications);
+// Make notifications listing public (returns only 'all' notifications when unauthenticated)
+router.get("/", getNotifications);
 router.post("/", protect, adminOnly, createNotification);
 export default router;

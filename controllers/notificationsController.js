@@ -2,9 +2,10 @@ import Notification from "../models/Notification.js";
 
 export const getNotifications = async (req, res) => {
   try {
-    const notes = await Notification.find({
-      $or: [{ role: req.user.role }, { role: "all" }]
-    }).sort({ createdAt: -1 });
+    // If unauthenticated, return only 'all' notifications. If authenticated, return notifications for user's role and 'all'.
+    const role = req.user ? req.user.role : null;
+    const query = role ? { $or: [{ role }, { role: 'all' }] } : { role: 'all' };
+    const notes = await Notification.find(query).sort({ createdAt: -1 });
     res.json(notes);
   } catch (error) {
     res.status(500).json({ message: error.message });
