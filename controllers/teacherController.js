@@ -1,10 +1,11 @@
-import Class from "../models/Class.js";
-
-export const getClasses = async (req, res) => {
+export const getTeacherClasses = async (req, res) => {
   try {
-    const classes = await Class.find({ teacher: req.user._id });
+    const classes = [
+      { id: "CSE101", subject: "Computer Networks", semester: "5th", studentsCount: 45 },
+      { id: "CSE102", subject: "Operating Systems", semester: "5th", studentsCount: 42 },
+    ];
     res.json(classes);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
