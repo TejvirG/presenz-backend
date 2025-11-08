@@ -7,6 +7,17 @@ import {
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+// Root info for attendance routes
+router.get("/", protect, (req, res) => {
+  res.json({
+    message: "Attendance endpoints",
+    endpoints: {
+      mark: "/api/attendance/mark (POST)",
+      studentMe: "/api/attendance/student/me (GET)",
+      classAttendance: "/api/attendance/class/:id (GET)"
+    }
+  });
+});
 router.post("/mark", protect, markAttendance);
 router.get("/student/me", protect, getStudentAttendance);
 router.get("/class/:id", protect, getClassAttendance);

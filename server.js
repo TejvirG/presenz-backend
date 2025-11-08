@@ -35,6 +35,10 @@ app.get("/api", (req, res) => {
 		}
 	});
 });
+// Health endpoint for monitoring
+app.get("/api/health", (req, res) => {
+	res.json({ status: "ok", uptime: process.uptime() });
+});
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/teacher", teacherRoutes);
