@@ -1,43 +1,23 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
-// POST /api/auth/signup
 export const registerUser = async (req, res) => {
   try {
-    console.log("Signup request received:", { ...req.body, password: "[REDACTED]" });
-    
     const { name, email, password, role } = req.body;
+    if (!name || !email || !password)
+      return res.status(400).json({ message: "All fields are required" });
 
-    // Basic validation with detailed errors
-    if (!name || !email || !password || !role) {
-      console.log("Missing fields:", { 
-        name: !name, 
-        email: !email, 
-        password: !password, 
-        role: !role 
-      });
-      return res.status(400).json({ 
-        error: "Please fill all fields",
-        missing: Object.entries({ name, email, password, role })
-          .filter(([_, v]) => !v)
-          .map(([k]) => k)
-      });
-    }
-
-    // Check existing user
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      console.log("User exists with email:", email);
-      return res.status(400).json({ error: "User already exists" });
-    }
+    if (existingUser)
+      return res.status(400).json({ message: "User already exists" });
 
-    // Normalize role to Title Case
-    const normalizedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-    console.log("Role normalized:", { original: role, normalized: normalizedRole });
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password, role: role.toLowerCase() });
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
 
     // Create new user with normalized role
     const newUser = await User.create({
